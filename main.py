@@ -1,5 +1,3 @@
-
-from numpy.lib.histograms import _histogram_dispatcher
 import credential
 from plexapi.server import PlexServer
 import pandas as pd
@@ -76,3 +74,4 @@ if __name__ == '__main__':
 
 df1 = pd.DataFrame({'artist':artistlist,'track':titlelist})
 df1.to_excel("downloadlist.xlsx")
+print("finished")
