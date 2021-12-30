@@ -1,0 +1,4 @@
+credential.py
+__pycache__
+*.pyc
+*downloadlist.xlsx
