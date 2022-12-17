@@ -2,4 +2,5 @@ credential.py
 __pycache__
 *.pyc
 *downloadlist.*
-*faileddownload.txt
+*.xlsx
+*.txt

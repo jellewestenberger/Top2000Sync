@@ -4,9 +4,9 @@ import pandas as pd
 from numpy import arcsin, can_cast, isnan
 from difflib import SequenceMatcher
 import time
-plex = PlexServer(credential.baseurl,credential.plexrpitoken)
+plex = PlexServer(credential.baseurl,credential.plextoken)
 
-df = pd.read_excel("./TOP-2000-2021.xlsx")
+df = pd.read_excel("./NPORadio2Top2000-2022.xlsx")
 # df = pd.read_excel("./test.xlsx")
 
 artistlist=[]
@@ -14,11 +14,23 @@ titlelist = []
 
 def similar(a, b):
     r=SequenceMatcher(None, a, b).ratio()
-    if r>=0.6:
+    print("%s is %f similar to %s"%(a,r,b))
+    if r>=0.4:
         return [True,r]
     else:
         return [False,r]
+    
 
+def filterstring(string):
+    ignoreterms = ["(Albumversie)",'\ufeff']
+    for i in ignoreterms:
+        string=string.replace(i,"")
+    if "(" in string and ")" in string:
+        i1= string.index("(")
+        i2= string.index(")")
+        if i2>i1:
+            string=string[:i1]+string[i2+1:]    
+    return string
 if __name__ == '__main__':
     print("start")
 
@@ -27,8 +39,8 @@ if __name__ == '__main__':
         counter=0
         resp_okay=False
         found = False
-        artist = df.artiest.iloc[i].replace('\ufeff','')
-        titel = df.titel.iloc[i].replace('\ufeff','')
+        artist = filterstring(df.artiest.iloc[i])
+        titel = filterstring(df.titel.iloc[i])
         
         attempt=0
         query = artist+" "+ titel
@@ -58,6 +70,7 @@ if __name__ == '__main__':
                 # artistlist.append(artist)
                 # titlelist.append(titel)
             else:
+                print("got %i responses"%len(resp))
                 for j in range(len(resp)):
                     if resp[j].TYPE=='track':
                         responsetitle=resp[j].title.lower()
@@ -84,7 +97,7 @@ if __name__ == '__main__':
                 
                     
         if not found:
-            a=input("%s %s not found. Add to list?(y/n)"%(artist,titel))
+            a="y"#input("%s %s not found. Add to list?(y/n)"%(artist,titel))
             if a=="y":
                 print("adding %s-%s to list"%(artist,titel))
                 artistlist.append(artist)
