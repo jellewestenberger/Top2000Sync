@@ -4,13 +4,9 @@ import pandas as pd
 from numpy import arcsin, can_cast, isnan
 from difflib import SequenceMatcher
 import time
-plex = PlexServer(credential.baseurl,credential.plextoken)
 
-df = pd.read_excel("./NPORadio2Top2000-2022.xlsx")
-# df = pd.read_excel("./test.xlsx")
 
-artistlist=[]
-titlelist = []
+
 
 def similar(a, b):
     r=SequenceMatcher(None, a, b).ratio()
@@ -33,7 +29,14 @@ def filterstring(string):
     return string
 if __name__ == '__main__':
     print("start")
+    plex = PlexServer(credential.baseurl,credential.plextoken)
+    df = pd.read_excel("./Top-2000-2023.xlsx")
+    artisttest=df['artiest'][804]
+    titletest= df['titel'][804]
+# df = pd.read_excel("./test.xlsx")
 
+    artistlist=[]
+    titlelist = []
     for i in range(1,len(df)):
         print("")
         counter=0
@@ -105,7 +108,7 @@ if __name__ == '__main__':
 
     df1 = pd.DataFrame({'artist':artistlist,'track':titlelist})
     df1.to_excel("downloadlist.xlsx")
-    f=open("downloadlist.txt",'w')
+    f=open("downloadlist.txt",'w',encoding='utf-8')
     for i in range(len(artistlist)):
         try:
             f.write(artistlist[i]+" "+titlelist[i]+"\n")
